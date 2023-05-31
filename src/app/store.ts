@@ -1,17 +1,25 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import { configureStore} from '@reduxjs/toolkit';
+import messagesReducer, {initialMessagesState} from "./reducers/messagesReducer";
+import websocketReducer from "./reducers/websocketReducer";
+import createSagaMiddleware from "redux-saga";
+import {webSocketSaga} from "./socketSaga";
+import usersReducer from "./reducers/usersReducer";
+
+
+const sagaMiddleware = createSagaMiddleware()
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    messages: messagesReducer,
+    websocket: websocketReducer,
+    users: usersReducer
   },
+  middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware()
+          .concat(sagaMiddleware),
 });
 
-export type AppDispatch = typeof store.dispatch;
+
+sagaMiddleware.run(webSocketSaga)
 export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+export type AppDispatch = typeof store.dispatch
