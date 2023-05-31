@@ -13,7 +13,7 @@ import {
 } from "./reducers/websocketReducer";
 
 import {RootState} from "./store";
-import {loginActionCreator, logoutActionCreator} from "./reducers/usersReducer";
+import {loginActionCreator, logoutActionCreator, setAllUsersActionCreator} from "./reducers/usersReducer";
 
 
 type WebSocketAction = ReceiveMessageActionType | SetConnectionActionType  ;
@@ -89,6 +89,10 @@ function* readWebSocket(channel: EventChannel<string>) {
                     break
                 case "pong":
                     console.log("pong")
+                    break
+                case "get-all-users":
+                    debugger
+                    yield put(setAllUsersActionCreator(parsedMessage.result))
             }}
         else if(message === "END") {
             yield put(logoutActionCreator())
