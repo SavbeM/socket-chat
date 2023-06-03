@@ -91,8 +91,10 @@ function* readWebSocket(channel: EventChannel<string>) {
                     console.log("pong")
                     break
                 case "get-all-users":
-                    debugger
-                    yield put(setAllUsersActionCreator(parsedMessage.result))
+                    const logged =  select((state: RootState) => state.users.currentUser.isLogged)
+                    if (logged) {
+                        yield put(setAllUsersActionCreator(parsedMessage.result))
+                    }
             }}
         else if(message === "END") {
             yield put(logoutActionCreator())

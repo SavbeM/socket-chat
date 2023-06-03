@@ -3,10 +3,16 @@ import React, {FC} from "react";
 import {RenderMessages} from "./RenderMessages";
 import {ChatInput} from "./ChatInput";
 import {UsersList} from "./UsersList";
+import {AppDispatch} from "../app/store";
+import {useDispatch} from "react-redux";
+import {closeSocketActionCreator} from "../app/reducers/websocketReducer";
 
 
 export const Chat: FC = () => {
-
+    const dispatch: AppDispatch = useDispatch()
+    window.onbeforeunload = () => {
+        dispatch(closeSocketActionCreator())
+    }
 
     return (
         <>
